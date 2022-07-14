@@ -26,7 +26,6 @@ public class RouterServlet extends HttpServlet {
         }));
     }
 
-
     private static void addRoute(String route, RouteHandler routeHandler) {
         routeMap.put(new RouterDefinition(route), routeHandler);
     }
@@ -36,15 +35,6 @@ public class RouterServlet extends HttpServlet {
         genericHandler(req, resp);
     }
 
-    private void genericHandler(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        for (Map.Entry<RouterDefinition, RouteHandler> route : routeMap.entrySet()) {
-            if (route.getKey().matches(req)) {
-                route.getValue().execute(req, resp);
-                return;
-            }
-        }
-        noMatchHandler(resp);
-    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -64,5 +54,28 @@ public class RouterServlet extends HttpServlet {
     private void noMatchHandler(HttpServletResponse resp) throws IOException {
         resp.setStatus(401);
         resp.getWriter().println("See you later alligator!!");
+    }
+
+    private boolean isVerified(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String token = request.getHeader("Authorization");
+        String actualToken = "secrete_staff";
+        if (!actualToken.equals(token)) {
+            response.getWriter().println("Sorry,authentication required");
+            response.setStatus(401);
+            return false;
+        }
+        return true;
+    }
+
+    private void genericHandler(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        if (isVerified(req, resp)) {
+            for (Map.Entry<RouterDefinition, RouteHandler> route : routeMap.entrySet()) {
+                if (route.getKey().matches(req)) {
+                    route.getValue().execute(req, resp);
+                    return;
+                }
+            }
+            noMatchHandler(resp);
+        }
     }
 }

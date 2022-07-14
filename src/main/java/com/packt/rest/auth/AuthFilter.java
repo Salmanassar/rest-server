@@ -17,10 +17,14 @@ public class AuthFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
+        isVerified(filterChain, request, response);
+    }
+
+    private void isVerified(FilterChain filterChain, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String token = request.getHeader("Authorization");
         String actualToken = "secrete staff";
         if(actualToken.equals(token)){
-            filterChain.doFilter(request,response);
+            filterChain.doFilter(request, response);
         }
         else {
             response.getWriter().println("Sorry,authentication required");
