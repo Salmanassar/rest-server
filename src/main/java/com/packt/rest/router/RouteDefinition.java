@@ -7,10 +7,10 @@ import java.util.List;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
-public class RouterDefinition {
+public class RouteDefinition {
     private String verbs;
     private List<String> pathBits;
-    public RouterDefinition(String route) {
+    public RouteDefinition(String route) {
         String[] parts = route.split(" ");
         verbs = parts[0];
         String rest = Arrays.stream(parts).skip(1L).collect(joining(" "));

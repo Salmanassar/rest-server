@@ -1,0 +1,1 @@
+ docker run --name todo -e POSTGRES_PASSWORD=todo -p 5433:5432 -d postgres:14-alpine

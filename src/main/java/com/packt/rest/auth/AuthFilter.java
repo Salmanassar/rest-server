@@ -22,7 +22,7 @@ public class AuthFilter implements Filter {
 
     private void isVerified(FilterChain filterChain, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String token = request.getHeader("Authorization");
-        String actualToken = "secrete staff";
+        String actualToken = "secrete_staff";
         if(actualToken.equals(token)){
             filterChain.doFilter(request, response);
         }
